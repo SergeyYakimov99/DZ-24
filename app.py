@@ -36,7 +36,7 @@ def do_cmd(cmd: str, value: str, data: list[str]) -> list:
     return result
 
 
-def do_guery(params: dict) -> listmypy:
+def do_guery(params: dict) -> list:
     with open(os.path.join(DATA_DIR, params["file_name"])) as f:
         file_data = f.readlines()
     """

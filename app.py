@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+import re
 
 from flask import Flask, request, jsonify
 from werkzeug.exceptions import BadRequest
@@ -10,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
 
-def do_cmd(cmd, value, data):
+def do_cmd(cmd: str, value: str, data: list[str]) -> list:
     """
     Универсальная фильтрация файла
     """
@@ -27,12 +28,15 @@ def do_cmd(cmd, value, data):
         result = sorted(data, reverse=reverse)
     elif cmd == "limit":
         result = data[:int(value)]
+    elif cmd == "regex":   # вариант выборки с использованием РВ
+        regex = re.compile(value)
+        result = list(filter(lambda v: regex.search(v), data))
     else:
         raise BadRequest
     return result
 
 
-def do_guery(params):
+def do_guery(params: dict) -> listmypy:
     with open(os.path.join(DATA_DIR, params["file_name"])) as f:
         file_data = f.readlines()
     """
